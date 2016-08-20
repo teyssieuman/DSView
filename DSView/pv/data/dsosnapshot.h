@@ -2,7 +2,7 @@
  * This file is part of the DSView project.
  * DSView is based on PulseView.
  *
- * Copyright (C) 2013 DreamSourceLab <dreamsourcelab@dreamsourcelab.com>
+ * Copyright (C) 2013 DreamSourceLab <support@dreamsourcelab.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -70,9 +70,14 @@ private:
     static const int VrmsScaleFactor;
 
 public:
-    DsoSnapshot(const sr_datafeed_dso &dso, uint64_t _total_sample_len, unsigned int channel_num, bool instant);
+    DsoSnapshot();
 
     virtual ~DsoSnapshot();
+
+    void clear();
+    void init();
+
+    void first_payload(const sr_datafeed_dso &dso, uint64_t total_sample_count, unsigned int channel_num, bool instant);
 
     void append_payload(const sr_datafeed_dso &dso);
 
@@ -84,12 +89,12 @@ public:
 
     void enable_envelope(bool enable);
 
-    double cal_vrms(double zero_off, unsigned int index) const;
-    double cal_vmean(unsigned int index) const;
+    double cal_vrms(double zero_off, int index) const;
+    double cal_vmean(int index) const;
 
 private:
+    void free_envelop();
 	void reallocate_envelope(Envelope &l);
-
     void append_payload_to_envelope_levels(bool header);
 
 private:
